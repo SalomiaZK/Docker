@@ -28,7 +28,6 @@ def execute_existing_ocaml_binary():
             capture_output=True,
             text=True,
             timeout=3,
-            cwd="marina" 
         )
         
         
