@@ -10,8 +10,10 @@ RUN apt-get update && apt-get install -y \
     make \
     build-essential \
     python3 \
-    python3-pip \
+    curl \
+    && curl -sS https://bootstrap.pypa.io/get-pip.py | python3 \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Crée le dossier de travail
 WORKDIR /app
