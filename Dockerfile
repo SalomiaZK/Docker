@@ -17,13 +17,15 @@ RUN apt update && apt install -y ocaml opam && \
 RUN chmod +x marina
 
 
-RUN python3 -m venv venv  
+RUN python3 -m venv venv   
 
 ENV PATH="/app/venv/bin:$PATH"
 
-RUN make && \
-    pip install --no-cache-dir flask
+RUN  pip install --no-cache-dir flask
 
+
+RUN cd marina && \
+    make 
 
 EXPOSE 8080
 
