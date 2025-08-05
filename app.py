@@ -28,7 +28,7 @@ def execute_existing_ocaml_binary():
             capture_output=True,
             text=True,
             timeout=3,
-            cwd="marina"# Temps maximal d'exécution pour éviter les boucles infinies
+            cwd="marina" 
         )
         
         
@@ -41,14 +41,12 @@ def execute_existing_ocaml_binary():
         if run_proc.returncode != 0:
             return f"Execution error (code {run_proc.returncode}): {run_proc.stderr}", 500
 
-        # Retourne la sortie standard du binaire
         return run_proc.stdout or "(no output)"
 
     except subprocess.TimeoutExpired:
         return "Execution timeout", 408
 
     except Exception as e:
-        # Gère toute autre erreur inattendue
         return f"Internal server error: {str(e)}", 500
 
 if __name__ == "__main__":
