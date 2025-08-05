@@ -1,45 +1,33 @@
+# Base image avec OCaml et Make
 FROM ubuntu:24.04
 
-WORKDIR /app
+# Variables d'environnement pour éviter les interactions
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Installer dépendances de base
-RUN apt update && apt install -y \
-    curl \
-    make \
+# Installation des dépendances nécessaires
+RUN apt-get update && apt-get install -y \
     ocaml \
-    opam \
+    make \
+    build-essential \
     python3 \
     python3-pip \
-    python3-venv \
-    git && \
-    apt clean && rm -rf /var/lib/apt/lists/
+    && rm -rf /var/lib/apt/lists/*
 
-# Initialiser opam correctement
-RUN opam init -y --disable-sandboxing && \
-    eval $(opam env) && \
-    opam install -y ocamlfind ounit2
+# Crée le dossier de travail
+WORKDIR /app
 
-# Copier les fichiers
+# Copie le code Flask et le dossier marina (avec le code OCaml)
 COPY app.py .
 COPY marina/ ./marina/
 
-# Compilation du code OCaml
-WORKDIR /app/marina
-RUN make
+# Donne les droits d'exécution sur le binaire (au cas où)
+RUN chmod +x ./marina/marina || true
 
-# Revenir dans /app
-WORKDIR /app
+# Installe Flask
+RUN pip3 install --no-cache-dir Flask
 
-# Rendre le binaire exécutable
-RUN chmod +x ./marina/marina
-
-# Créer et activer venv
-RUN python3 -m venv venv
-ENV PATH="/app/venv/bin:$PATH"
-
-# Installer Flask
-RUN pip install --no-cache-dir flask
-
+# Expose le port 8080
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+# Commande de démarrage
+CMD ["python3", "app.py"]
