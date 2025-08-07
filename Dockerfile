@@ -31,7 +31,7 @@ COPY marina ./marina
 # Cela garantit que l'exécutable marina est lié aux bibliothèques du conteneur.
 # Le '|| true' est conservé pour éviter que la construction Docker ne s'arrête si 'make' échoue,
 # mais assurez-vous que votre Makefile fonctionne correctement.
-RUN cd ./marina && chmod +x marina || true && cd ..
+RUN cd ./marina && make && chmod +x marina || true && cd ..
 
 # Installe Flask. Utilise --no-cache-dir pour éviter de stocker les fichiers de cache pip,
 # ce qui réduit la taille de l'image.
